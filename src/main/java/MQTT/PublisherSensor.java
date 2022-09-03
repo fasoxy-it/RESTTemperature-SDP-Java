@@ -7,7 +7,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import static java.lang.Thread.sleep;
 
-public class Publisher {
+public class PublisherSensor {
 
     public static void main(String[] args) {
 
@@ -28,7 +28,7 @@ public class Publisher {
             System.out.println(clientId + "Connected");
 
             while (true) {
-                String payload = String.valueOf(18 + (Math.random() * 22));
+                String payload = String.valueOf(18 + (Math.random()) * (22 - 18));
                 MqttMessage message = new MqttMessage(payload.getBytes());
 
                 message.setQos(qos);
@@ -51,4 +51,5 @@ public class Publisher {
             interruptedException.printStackTrace();
         }
     }
+
 }

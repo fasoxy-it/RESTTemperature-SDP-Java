@@ -5,17 +5,18 @@ import org.eclipse.paho.client.mqttv3.*;
 import java.sql.Timestamp;
 import java.util.Scanner;
 
-public class Subscriber {
+public class SubscriberController {
 
     public static void main(String[] args) {
 
         MqttClient client;
         String broker = "tcp://localhost:1883";
         String clientId = MqttClient.generateClientId();
-        String topic = "home/sensors/#";
+        String topic = "home/controllers/temp";
         int qos = 2;
 
         try {
+
             client = new MqttClient(broker, clientId);
             MqttConnectOptions connectOptions = new MqttConnectOptions();
             connectOptions.setCleanSession(true);
@@ -26,7 +27,7 @@ public class Subscriber {
 
             client.setCallback(new MqttCallback() {
 
-                public void messageArrived(String topic, MqttMessage message) {
+                public void messageArrived(String topic, MqttMessage message) throws MqttException {
                     // Called when a message arrives from the server that matches any subscription made by the client
                     String time = new Timestamp(System.currentTimeMillis()).toString();
                     String receivedMessage = new String(message.getPayload());
@@ -49,10 +50,10 @@ public class Subscriber {
                 }
 
             });
+
             System.out.println(clientId + " Subscribing ... - Thread PID: " + Thread.currentThread().getId());
             client.subscribe(topic,qos);
             System.out.println(clientId + " Subscribed to topics : " + topic);
-
 
             System.out.println("\n ***  Press a random key to exit *** \n");
             Scanner command = new Scanner(System.in);
@@ -68,4 +69,5 @@ public class Subscriber {
             mqttException.printStackTrace();
         }
     }
+
 }
